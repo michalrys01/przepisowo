@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<a th:href="@{'/'}">Home</a>
+<div class="post">
+    <h2 th:text="${recipe.title}">Nazwa przepisu</h2>
+    <h4 th:text="'Autor przepisu:' + ${recipe.account.firstName}">Autor przepisu:</h4>
+    <h4 th:text="'Opublikowano dnia ' + ${recipe.created_time}">Opublikowano dnia:</h4>
+    <p th:text="${recipe.text}">Opis przepisu</p>
+    <br>
+</div>
+
+</body>
+</html>
+</html>
