@@ -1,13 +1,20 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Przepisowo - najlepsze przepisy</title>
+    <style>
+        .container {
+            float: left;
+
+        }
+    </style>
 </head>
 <body>
+<a href="/weather">Pogoda</a>
 <div class="container">
     <h1>Przepisowo - najlepsze przepisy</h1>
     <a th:href="@{/recipes/new}">Dodaj nowy przepis</a>
@@ -24,6 +31,6 @@
     <a th:href="@{/register}">Rejestracja</a>
     <a th:href="@{/login}">Logowanie</a>
 </div>
+
 </body>
-</html>
 </html>
