@@ -1,8 +1,10 @@
 package przepisowoaplikacja.przepisowoaplikacja.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,6 +57,54 @@ public class RecipeController {
     }
 
 
+    @PostMapping("/recipes/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String updatePost(@PathVariable Long id, Recipe recipe, BindingResult result, Model model){
+        Optional<Recipe> optionalRecipe = recipeService.getById(id);
+        if(optionalRecipe.isPresent()){
+            Recipe existingRecipe = optionalRecipe.get();
 
+            existingRecipe.setTitle(recipe.getTitle());
+            existingRecipe.setText(recipe.getText());
+            recipeService.save(existingRecipe);
+        }
+        return "redirect:/recipes/" + recipe.getId();
+    }
+
+    @GetMapping("/recipes/{id}/edit")
+    @PreAuthorize("isAuthenticated()")
+    public String getPostForEdit(@PathVariable Long id, Model model) {
+
+        // find recipe by id
+        Optional<Recipe> optionalRecipe = recipeService.getById(id);
+        // if recipe exist put it in model
+        if (optionalRecipe.isPresent()) {
+            Recipe recipe = optionalRecipe.get();
+            model.addAttribute("recipe", recipe);
+            return "recipe_edit";
+        } else {
+            return "404";
+        }
+    }
+
+
+
+
+
+    @GetMapping("/recipes/{id}/delete")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String deletePost(@PathVariable Long id) {
+
+        // find recipe by id
+        Optional<Recipe> optionalRecipe = recipeService.getById(id);
+        if (optionalRecipe.isPresent()) {
+            Recipe recipe = optionalRecipe.get();
+
+            recipeService.delete(recipe);
+            return "redirect:/";
+        } else {
+            return "404";
+        }
+    }
 
 }

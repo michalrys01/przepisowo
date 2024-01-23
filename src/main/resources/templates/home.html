@@ -19,6 +19,7 @@
             <h2><a th:href="@{'/recipes/' + ${recipe.id}}" th:text="${recipe.title}">Nazwa przepisu</a></h2>
             <h4 th:text="'Autor przepisu:' + ${recipe.account.firstName}">Autor przepisu:</h4>
             <h4 th:text="'Opublikowano dnia ' + ${recipe.created_time}">Opublikowano dnia:</h4>
+            <h4 th:text="'Edytowano dnia ' + ${recipe.edit_time}"> Edytowano:</h4>
             <p th:text="${recipe.text}">Opis przepisu</p>
             <br>
         </div>

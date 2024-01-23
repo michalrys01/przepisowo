@@ -27,7 +27,12 @@ public class RecipeService {
         if(recipe.getId()==null){
             recipe.setCreated_time(LocalDateTime.now());
         }
+        recipe.setEdit_time(LocalDateTime.now());
         return recipeRepository.save(recipe);
+    }
+
+    public void delete(Recipe recipe){
+        recipeRepository.delete(recipe);
     }
 
 }

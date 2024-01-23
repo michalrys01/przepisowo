@@ -22,11 +22,24 @@ public class Recipe {
     private String text;
 
     private LocalDateTime created_time;
+    private LocalDateTime edit_time;
 
 
     @NotNull
     @ManyToOne
     @JoinColumn(name="account_id", referencedColumnName = "id",nullable = false)
     private Account account;
+
+
+    @Override
+    public String toString(){
+        return "Recipe{" +
+                "id="+id+
+                ",title='" + title + "'"+
+                ", text='" + text + "'"+
+                ", created_time='" + created_time + "'"+
+                ",edit_time=" + edit_time +"}";
+    }
+
 
 }
