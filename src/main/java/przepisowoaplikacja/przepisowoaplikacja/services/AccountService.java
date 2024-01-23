@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import przepisowoaplikacja.przepisowoaplikacja.models.Account;
 import przepisowoaplikacja.przepisowoaplikacja.repositories.AccountRepository;
 
+import java.util.Optional;
+
 @Service
 public class AccountService {
     @Autowired
@@ -15,5 +17,8 @@ public class AccountService {
     }
 
 
+    public Optional<Account> findByEmail(String email){
+        return  accountRepository.findByEmail(email);
+    }
 
 }
