@@ -10,6 +10,7 @@
 <body>
 <div class="container">
     <h1>Przepisowo - najlepsze przepisy</h1>
+    <a th:href="@{/recipes/new}">Dodaj nowy przepis</a>
     <hr>
     <div class="posts-container">
         <div class="post" th:each="recipe : ${recipe}">
@@ -20,6 +21,8 @@
             <br>
         </div>
     </div>
+    <a th:href="@{/register}">Rejestracja</a>
+    <a th:href="@{/login}">Logowanie</a>
 </div>
 </body>
 </html>

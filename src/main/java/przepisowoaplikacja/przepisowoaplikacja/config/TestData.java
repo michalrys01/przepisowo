@@ -32,13 +32,11 @@ public class TestData implements CommandLineRunner {
             account1.setLastName("user");
             account1.setEmail("user@domain.com");
             account1.setPassword("user");
-            account1.setUsername("user");
 
             account2.setFirstName("admin");
             account2.setLastName("admin");
             account2.setEmail("admin@domain.com");
             account2.setPassword("admin");
-            account2.setUsername("admin");
 
             accountService.save(account1);
             accountService.save(account2);

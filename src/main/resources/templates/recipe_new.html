@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dodaj nowy przepis</title>
+</head>
+<body>
+
+<div class="container">
+    <a th:href="@{'/'}">Home</a>
+    <form action="#" th:action="@{'/recipes/new'}" th:object="${recipe}" method="POST">
+    <input type="hidden" th:field="*{account}">
+        <input type="hidden" th:field="*{created_time}">
+        <h2>Dodaj nowy przepis</h2>
+        <div>
+            <label for = "nowa_nazwa_przepisu">Nazwa przepisu</label>
+            <input id="nowa_nazwa_przepisu" type="text" th:field="*{title}" placeholder="Nazwa przepisu">
+        </div>
+        <div>
+            <label for = "nowy_przepis_text">Przepis</label>
+            <textarea id="nowy_przepis_text" type="text" th:field="*{text}" placeholder="Przepis"></textarea>
+        </div>
+<button type="submit">Dodaj przepis</button>
+    </form>
+
+</div>
+
+</body>
+</html>
+</html>
