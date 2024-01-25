@@ -62,8 +62,8 @@ public class RecipeController {
         if (optionalRecipe.isPresent()) {
             Recipe existingRecipe = optionalRecipe.get();
 
-            // Sprawdź, czy użytkownik jest właścicielem przepisu
-            if (existingRecipe.getAccount().getEmail().equals(userDetails.getUsername())) {
+            // Sprawdź, czy użytkownik jest właścicielem przepisu lub administratorem
+            if (existingRecipe.getAccount().getEmail().equals(userDetails.getUsername()) || userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
                 existingRecipe.setTitle(recipe.getTitle());
                 existingRecipe.setText(recipe.getText());
                 recipeService.save(existingRecipe);
@@ -74,23 +74,25 @@ public class RecipeController {
         return "redirect:/recipes/" + recipe.getId();
     }
 
+
     @GetMapping("/recipes/{id}/edit")
     public String getPostForEdit(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<Recipe> optionalRecipe = recipeService.getById(id);
         if (optionalRecipe.isPresent()) {
             Recipe recipe = optionalRecipe.get();
 
-            // Sprawdź, czy użytkownik jest właścicielem przepisu
-            if (recipe.getAccount().getEmail().equals(userDetails.getUsername())) {
+            // Sprawdź, czy użytkownik jest właścicielem przepisu lub administratorem
+            if (recipe.getAccount().getEmail().equals(userDetails.getUsername()) || userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
                 model.addAttribute("recipe", recipe);
                 return "recipe_edit";
             } else {
-                return "redirect:/"; // Przekieruj na stronę startową, jeśli użytkownik nie jest właścicielem przepisu
+                return "redirect:/"; // Przekieruj na stronę startową, jeśli użytkownik nie jest właścicielem przepisu ani administratorem
             }
         } else {
             return "404";
         }
     }
+
 
 
     @GetMapping("/recipes/{id}/delete")

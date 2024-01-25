@@ -7,18 +7,65 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Przepisowo - najlepsze przepisy</title>
     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #98FF98;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
         .weather-container {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            background-color: #f0f0f0;
+            background-color: #fff7ac;
             padding: 15px;
             border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h3, p {
+            color: #343a40;
+        }
+
+        form {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label, input {
+            margin-bottom: 10px;
+            color: #343a40;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px; /* Add margin between input and button */
+        }
+
+        .error-message {
+            color: #dc3545;
+            margin-top: 10px;
+        }
+
+        .back-link {
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
-<a href="/">Powrót do przepisów</a>
 <div class="weather-container">
     <h3 th:text="'Pogoda w ' + ${city}"></h3>
     <p th:text="'Temperatura: ' + ${temperature} + ' °C'"></p>
@@ -28,10 +75,13 @@
         <label for="city">Zmień miasto: </label>
         <input type="text" id="city" name="city" required>
         <button type="submit">Pobierz pogodę</button>
-    </form>
 
+    </form>
+<br>
     <!-- Dodany warunek do wyświetlania błędu -->
     <p th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></p>
+
+    <a href="/" class="back-link">Powrót do przepisów</a>
 </div>
 
 </body>

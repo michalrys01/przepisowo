@@ -5,16 +5,93 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #8a8686;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background-color: #98FF98;
+
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #343a40;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        hr {
+            border: 1px solid #dee2e6;
+            margin: 20px 0;
+        }
+
+        .posts-container {
+            margin-top: 20px;
+        }
+
+        .post {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff7ac;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .user-info {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
+    <div class="user-info" sec:authorize="isAuthenticated()">
+        <form action="#"
+              th:action="@{/logout}"
+              method="POST">
+            <label>
+                Witaj, <span sec:authentication="name">Uzytkownik</span>
+            </label>
+            <button type="submit">Wyloguj</button>
+        </form>
+    </div>
+
     <h1>Przepisowo - najlepsze przepisy</h1>
     <ul>
         <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Logowanie</a></li>
         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Rejestracja</a></li>
         <li><a th:href="@{/recipes/new}">Dodaj nowy przepis</a></li>
         <li><a href="/weather">Przejdź do pogody</a></li>
-
     </ul>
     <hr>
     <div class="posts-container">
@@ -24,18 +101,6 @@
             <h4 th:text="'Opublikowano dnia ' + ${#temporals.format(recipe.created_time, 'yyyy-MM-dd HH:mm')}">Opublikowano dnia:</h4>
             <p th:text="${recipe.text}">Opis przepisu</p>
             <br>
-        </div>
-        <div sec:authorize="isAuthenticated()">
-            <form action="#"
-                  th:action="@{/logout}"
-                  method="POST">
-                <div>
-                    <label>
-                        Witaj, <span sec:authentication="name"> Uzytkownik</span>
-                    </label>
-                </div>
-                <button type="submit">Wyloguj</button>
-            </form>
         </div>
     </div>
 </div>

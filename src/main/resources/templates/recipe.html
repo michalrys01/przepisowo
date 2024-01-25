@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
@@ -6,9 +6,60 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #98FF98;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background-color: #fff7ac;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2, h4, p {
+            color: #343a40;
+        }
+
+        .post {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff7ac;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none; /* Remove underline */
+            display: inline-block; /* Align buttons horizontally */
+            margin-top: 10px; /* Add margin for spacing */
+        }
+    </style>
 </head>
 <body>
-<a th:href="@{'/'}">Home</a>
+
 <div class="post">
     <h2 th:text="${recipe.title}">Nazwa przepisu</h2>
     <h4 th:text="'Autor przepisu:' + ${recipe.account.firstName}">Autor przepisu:</h4>
@@ -18,10 +69,19 @@
     <br>
 </div>
 <ul sec:authorize="isAuthenticated()">
-    <li><a th:href="@{'/recipes/' + ${recipe.id} + '/edit'}">Edytuj</a></li>
-    <li><a th:href="@{'/recipes/' + ${recipe.id} + '/delete'}">Usun</a></li>
-
+    <li>
+        <a th:href="@{'/recipes/' + ${recipe.id} + '/edit'}">
+            <button>Edytuj</button>
+        </a>
+    </li>
+    <li>
+        <a th:href="@{'/recipes/' + ${recipe.id} + '/delete'}">
+            <button>Usun</button>
+        </a>
+        <a href="/"> <!-- Changed th:href to href for demonstration purposes -->
+            <button>Home</button>
+        </a>
+    </li>
 </ul>
 </body>
-</html>
 </html>
