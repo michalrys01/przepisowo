@@ -26,9 +26,9 @@ public class WebSecurityConfig {
         http
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/", "/register/**", "/recipes/**").permitAll()
-                                .requestMatchers(PathRequest.toH2Console()).permitAll()
-                                .anyRequest().authenticated()
+                                .requestMatchers("/", "/register/**").permitAll()
+                                .requestMatchers("/recipes/new").authenticated()
+                                .requestMatchers("/recipes/**").permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
