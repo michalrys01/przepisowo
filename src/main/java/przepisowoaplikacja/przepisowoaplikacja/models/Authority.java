@@ -14,7 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class Authority implements Serializable {
 
-
+//authority
 @Id
 @Column(length = 16)
 private String name;
