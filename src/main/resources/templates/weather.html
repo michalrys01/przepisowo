@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Przepisowo - najlepsze przepisy</title>
+    <style>
+        .weather-container {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background-color: #f0f0f0;
+            padding: 15px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<a href="/">Powrót do przepisów</a>
+<div class="weather-container">
+    <h3 th:text="'Pogoda w ' + ${city}"></h3>
+    <p th:text="'Temperatura: ' + ${temperature} + ' °C'"></p>
+    <p th:text="'Wiatr: ' + ${wind} + ' m/s'"></p>
+    <form th:action="@{/weather}" method="get">
+        <label for="city">Zmień miasto: </label>
+        <input type="text" id="city" name="city" required>
+        <button type="submit">Pobierz pogodę</button>
+    </form>
+</div>
+
+</body>
+</html>

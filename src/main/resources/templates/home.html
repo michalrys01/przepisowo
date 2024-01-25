@@ -1,7 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org"
-                xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
->
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -19,27 +17,13 @@
             <h2><a th:href="@{'/recipes/' + ${recipe.id}}" th:text="${recipe.title}">Nazwa przepisu</a></h2>
             <h4 th:text="'Autor przepisu:' + ${recipe.account.firstName}">Autor przepisu:</h4>
             <h4 th:text="'Opublikowano dnia ' + ${recipe.created_time}">Opublikowano dnia:</h4>
-            <h4 th:text="'Edytowano dnia ' + ${recipe.edit_time}"> Edytowano:</h4>
             <p th:text="${recipe.text}">Opis przepisu</p>
             <br>
         </div>
     </div>
-    <ul sec:authorize="!isAuthenticated()">
     <a th:href="@{/register}">Rejestracja</a>
     <a th:href="@{/login}">Logowanie</a>
-    </ul>
-    <div sec:authorize="isAuthenticated()">
-    <form action="#"
-    th:action="@{/logout}"
-    method="POST">
-        <div>
-        <label>
-        Witaj, <span sec:authentication="name"> Uzytkownik</span>
-        </label>
-        </div>
-        <button type="submit">Wyloguj</button>
-    </form>
-    </div>
 </div>
 </body>
+</html>
 </html>
