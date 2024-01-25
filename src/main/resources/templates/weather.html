@@ -23,11 +23,15 @@
     <h3 th:text="'Pogoda w ' + ${city}"></h3>
     <p th:text="'Temperatura: ' + ${temperature} + ' °C'"></p>
     <p th:text="'Wiatr: ' + ${wind} + ' m/s'"></p>
+
     <form th:action="@{/weather}" method="get">
         <label for="city">Zmień miasto: </label>
         <input type="text" id="city" name="city" required>
         <button type="submit">Pobierz pogodę</button>
     </form>
+
+    <!-- Dodany warunek do wyświetlania błędu -->
+    <p th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></p>
 </div>
 
 </body>
