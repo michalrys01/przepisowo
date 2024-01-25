@@ -1,30 +1,43 @@
-<!doctype html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
 <body>
 <div class="container">
     <h1>Przepisowo - najlepsze przepisy</h1>
-    <a href = "/weather">Przejdz do pogody</a>
-    <br>
-    <a th:href="@{/recipes/new}">Dodaj nowy przepis</a>
+    <ul>
+        <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}">Logowanie</a></li>
+        <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}">Rejestracja</a></li>
+        <li><a th:href="@{/recipes/new}">Dodaj nowy przepis</a></li>
+        <li><a href="/weather">Przejdź do pogody</a></li>
+
+    </ul>
     <hr>
     <div class="posts-container">
         <div class="post" th:each="recipe : ${recipe}">
             <h2><a th:href="@{'/recipes/' + ${recipe.id}}" th:text="${recipe.title}">Nazwa przepisu</a></h2>
             <h4 th:text="'Autor przepisu:' + ${recipe.account.firstName}">Autor przepisu:</h4>
-            <h4 th:text="'Opublikowano dnia ' + ${recipe.created_time}">Opublikowano dnia:</h4>
+            <h4 th:text="'Opublikowano dnia ' + ${#temporals.format(recipe.created_time, 'yyyy-MM-dd HH:mm')}">Opublikowano dnia:</h4>
             <p th:text="${recipe.text}">Opis przepisu</p>
             <br>
         </div>
+        <div sec:authorize="isAuthenticated()">
+            <form action="#"
+                  th:action="@{/logout}"
+                  method="POST">
+                <div>
+                    <label>
+                        Witaj, <span sec:authentication="name"> Uzytkownik</span>
+                    </label>
+                </div>
+                <button type="submit">Wyloguj</button>
+            </form>
+        </div>
     </div>
-    <a th:href="@{/register}">Rejestracja</a>
-    <a th:href="@{/login}">Logowanie</a>
 </div>
 </body>
 </html>

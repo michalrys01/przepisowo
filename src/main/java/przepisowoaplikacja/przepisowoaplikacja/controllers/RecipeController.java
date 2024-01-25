@@ -37,8 +37,8 @@ public class RecipeController {
     }
 
     @GetMapping("/recipes/new")
-    public String createNewRecipe(Model model) {
-        Optional<Account> optionalAccount = accountService.findByEmail("user@domain.com");
+    public String createNewRecipe(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        Optional<Account> optionalAccount = accountService.findByEmail(userDetails.getUsername());
         if (optionalAccount.isPresent()) {
             Recipe recipe = new Recipe();
             recipe.setAccount(optionalAccount.get());
@@ -48,6 +48,7 @@ public class RecipeController {
             return "404";
         }
     }
+
 
     @PostMapping("/recipes/new")
     public String saveNewRecipe(@ModelAttribute Recipe recipe) {

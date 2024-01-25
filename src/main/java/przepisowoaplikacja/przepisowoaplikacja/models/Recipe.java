@@ -21,6 +21,8 @@ public class Recipe {
     @Column(columnDefinition="TEXT")
     private String text;
 
+
+
     private LocalDateTime created_time;
     private LocalDateTime edit_time;
 
