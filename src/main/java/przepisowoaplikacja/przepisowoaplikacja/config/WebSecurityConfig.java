@@ -15,29 +15,34 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-
+    // Bean do kodowania hasła za pomocą BCrypt
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    // Bean do konfigurowania łańcucha filtrowania zabezpieczeń
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                // Konfiguracja reguł autoryzacji
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/", "/register/**").permitAll()
                                 .requestMatchers("/recipes/new").authenticated()
                                 .requestMatchers("/recipes/**").permitAll()
                 )
+                // Konfiguracja logowania opartego na formularzu
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/",true)
-                        .failureUrl("/login?error")
+                        .defaultSuccessUrl("/",true) // Przekieruj na stronę główną po udanym zalogowaniu
+                        .failureUrl("/login?error") // Przekieruj na stronę logowania z parametrem błędu po nieudanym logowaniu
                         .permitAll()
+                        .permitAll()
+                        // Wyłącz ochronę przed atakami CSRF
+
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers ->

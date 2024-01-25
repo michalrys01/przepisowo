@@ -24,6 +24,7 @@ public class RecipeController {
     @Autowired
     private AccountService accountService;
 
+    // Metoda obsługująca żądanie GET na wyświetlenie szczegółów przepisu o podanym identyfikatorze
     @GetMapping("/recipes/{id}")
     public String getRecipe(@PathVariable Long id, Model model) {
         Optional<Recipe> optionalRecipe = recipeService.getById(id);
@@ -32,10 +33,11 @@ public class RecipeController {
             model.addAttribute("recipe", recipe);
             return "recipe";
         } else {
-            return "404";
+            return "404"; // Strona błędu 404, gdy przepis o podanym identyfikatorze nie istnieje
         }
     }
 
+    // Metoda obsługująca żądanie GET na utworzenie nowego przepisu
     @GetMapping("/recipes/new")
     public String createNewRecipe(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<Account> optionalAccount = accountService.findByEmail(userDetails.getUsername());
@@ -45,17 +47,18 @@ public class RecipeController {
             model.addAttribute("recipe", recipe);
             return "recipe_new";
         } else {
-            return "404";
+            return "404"; // Strona błędu 404, gdy nie można znaleźć konta użytkownika
         }
     }
 
-
+    // Metoda obsługująca żądanie POST na zapisanie nowego przepisu
     @PostMapping("/recipes/new")
     public String saveNewRecipe(@ModelAttribute Recipe recipe) {
         recipeService.save(recipe);
         return "redirect:/recipes/" + recipe.getId();
     }
 
+    // Metoda obsługująca żądanie POST na aktualizację istniejącego przepisu
     @PostMapping("/recipes/{id}")
     public String updatePost(@PathVariable Long id, @ModelAttribute Recipe recipe, BindingResult result, Model model, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<Recipe> optionalRecipe = recipeService.getById(id);
@@ -74,7 +77,7 @@ public class RecipeController {
         return "redirect:/recipes/" + recipe.getId();
     }
 
-
+    // Metoda obsługująca żądanie GET na edycję przepisu
     @GetMapping("/recipes/{id}/edit")
     public String getPostForEdit(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<Recipe> optionalRecipe = recipeService.getById(id);
@@ -89,12 +92,11 @@ public class RecipeController {
                 return "redirect:/"; // Przekieruj na stronę startową, jeśli użytkownik nie jest właścicielem przepisu ani administratorem
             }
         } else {
-            return "404";
+            return "404"; // Strona błędu 404, gdy przepis o podanym identyfikatorze nie istnieje
         }
     }
 
-
-
+    // Metoda obsługująca żądanie GET na usunięcie przepisu
     @GetMapping("/recipes/{id}/delete")
     public String deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails, Model model) {
         Optional<Recipe> optionalRecipe = recipeService.getById(id);
@@ -114,5 +116,4 @@ public class RecipeController {
             return "redirect:/"; // Przekieruj do strony głównej z komunikatem o nieistniejącym przepisie
         }
     }
-
 }

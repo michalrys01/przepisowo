@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+//Ten kod to Spring Boot CommandLineRunner, który jest uruchamiany automatycznie przy starcie aplikacji i wypełnia bazę danych danymi testowymi, jeśli nie ma jeszcze żadnych przepisów.
 @Component
 public class TestData implements CommandLineRunner {
 
@@ -28,10 +29,12 @@ public class TestData implements CommandLineRunner {
 
     @Override
     public void run(String...args) throws Exception{
+        // Pobierz wszystkie przepisy z serwisu
         List<Recipe> recipe = recipeService.getAll();
-
+        // Jeśli nie ma przepisów, wypełnij bazę danych danymi testowymi
         if(recipe.size()==0){
 
+            // Tworzenie ról uprawnień (USER i ADMIN)
             Authority user = new Authority();
             user.setName("ROLE_USER");
             authorityRepository.save(user);
@@ -40,6 +43,8 @@ public class TestData implements CommandLineRunner {
             admin.setName("ROLE_ADMIN");
             authorityRepository.save(admin);
 
+            // Tworzenie testowych kont użytkowników
+
             Account account1 = new Account();
             Account account2 = new Account();
             Account account3 = new Account();
@@ -47,6 +52,8 @@ public class TestData implements CommandLineRunner {
             Account account5 = new Account();
             Account account6 = new Account();
 
+
+            // Ustawianie szczegółów użytkownika
             account1.setFirstName("user");
             account1.setLastName("user");
             account1.setEmail("user@domain.com");
@@ -102,6 +109,7 @@ public class TestData implements CommandLineRunner {
             authorityRepository.findById("ROLE_USER").ifPresent(authorities6::add);
             account6.setAuthorities(authorities6);
 
+            // Zapisywanie utworzonych kont za pomocą accountService
 
             accountService.save(account5);
             accountService.save(account2);
@@ -109,7 +117,13 @@ public class TestData implements CommandLineRunner {
             accountService.save(account4);
             accountService.save(account6);
 
+            // Tworzenie testowych przepisów
+
             Recipe recipe1 = new Recipe();
+
+            // Ustawianie szczegółów przepisu, w tym tytułu, tekstu i powiązanie go z kontem (account5 w tym przypadku)
+
+
             recipe1.setTitle("Rosół");
             recipe1.setText("PRZYGOTOWANIE\n" +
                     "Jeśli mamy całego kurczaka należy go pokroić na części - odciąć szyję, skrzydełka, uda. Korpus pozostawić razem z piersiami.\n" +
@@ -168,6 +182,7 @@ public class TestData implements CommandLineRunner {
                     "* Polecam połączenie pół na pół mozzarelli świeżej (z zalewy, w kulce) oraz suchej (tartej).");
             recipe4.setAccount(account4);
 
+            // Zapisywanie utworzonych przepisów za pomocą recipeService
 
 
             recipeService.save(recipe1);
