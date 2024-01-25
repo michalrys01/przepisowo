@@ -1,14 +1,13 @@
 package przepisowoaplikacja.przepisowoaplikacja.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import przepisowoaplikacja.przepisowoaplikacja.models.Account;
 import przepisowoaplikacja.przepisowoaplikacja.models.Recipe;
 import przepisowoaplikacja.przepisowoaplikacja.services.AccountService;
@@ -26,84 +25,90 @@ public class RecipeController {
     private AccountService accountService;
 
     @GetMapping("/recipes/{id}")
-    public String getRecipie(@PathVariable Long id, Model model){
+    public String getRecipe(@PathVariable Long id, Model model) {
         Optional<Recipe> optionalRecipe = recipeService.getById(id);
-        if(optionalRecipe.isPresent()){
+        if (optionalRecipe.isPresent()) {
             Recipe recipe = optionalRecipe.get();
             model.addAttribute("recipe", recipe);
             return "recipe";
-        }else{
+        } else {
             return "404";
         }
     }
 
     @GetMapping("/recipes/new")
-    public String createNewRecipe(Model model){
+    public String createNewRecipe(Model model) {
         Optional<Account> optionalAccount = accountService.findByEmail("user@domain.com");
-        if (optionalAccount.isPresent()){
+        if (optionalAccount.isPresent()) {
             Recipe recipe = new Recipe();
             recipe.setAccount(optionalAccount.get());
             model.addAttribute("recipe", recipe);
             return "recipe_new";
-        }else{
+        } else {
             return "404";
         }
     }
 
     @PostMapping("/recipes/new")
-    public String saveNewRecipe(@ModelAttribute Recipe recipe){
+    public String saveNewRecipe(@ModelAttribute Recipe recipe) {
         recipeService.save(recipe);
-        return "redirect:/recipes/"+recipe.getId();
+        return "redirect:/recipes/" + recipe.getId();
     }
 
-
     @PostMapping("/recipes/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public String updatePost(@PathVariable Long id, Recipe recipe, BindingResult result, Model model){
+    public String updatePost(@PathVariable Long id, @ModelAttribute Recipe recipe, BindingResult result, Model model, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<Recipe> optionalRecipe = recipeService.getById(id);
-        if(optionalRecipe.isPresent()){
+        if (optionalRecipe.isPresent()) {
             Recipe existingRecipe = optionalRecipe.get();
 
-            existingRecipe.setTitle(recipe.getTitle());
-            existingRecipe.setText(recipe.getText());
-            recipeService.save(existingRecipe);
+            // Sprawdź, czy użytkownik jest właścicielem przepisu
+            if (existingRecipe.getAccount().getEmail().equals(userDetails.getUsername())) {
+                existingRecipe.setTitle(recipe.getTitle());
+                existingRecipe.setText(recipe.getText());
+                recipeService.save(existingRecipe);
+            } else {
+                return "403"; // Możesz utworzyć stronę z informacją o braku uprawnień
+            }
         }
         return "redirect:/recipes/" + recipe.getId();
     }
 
     @GetMapping("/recipes/{id}/edit")
-    @PreAuthorize("isAuthenticated()")
-    public String getPostForEdit(@PathVariable Long id, Model model) {
-
-        // find recipe by id
+    public String getPostForEdit(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
         Optional<Recipe> optionalRecipe = recipeService.getById(id);
-        // if recipe exist put it in model
         if (optionalRecipe.isPresent()) {
             Recipe recipe = optionalRecipe.get();
-            model.addAttribute("recipe", recipe);
-            return "recipe_edit";
+
+            // Sprawdź, czy użytkownik jest właścicielem przepisu
+            if (recipe.getAccount().getEmail().equals(userDetails.getUsername())) {
+                model.addAttribute("recipe", recipe);
+                return "recipe_edit";
+            } else {
+                return "redirect:/"; // Przekieruj na stronę startową, jeśli użytkownik nie jest właścicielem przepisu
+            }
         } else {
             return "404";
         }
     }
 
 
-
-
-
     @GetMapping("/recipes/{id}/delete")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String deletePost(@PathVariable Long id) {
-
-        // find recipe by id
+    public String deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails, Model model) {
         Optional<Recipe> optionalRecipe = recipeService.getById(id);
         if (optionalRecipe.isPresent()) {
             Recipe recipe = optionalRecipe.get();
 
-            recipeService.delete(recipe);
-            return "redirect:/";
+            // Sprawdź, czy użytkownik jest właścicielem przepisu lub administratorem
+            if (recipe.getAccount().getEmail().equals(userDetails.getUsername()) || userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+                recipeService.delete(recipe);
+                return "redirect:/";
+            } else {
+                model.addAttribute("error", "Nie masz uprawnień do usunięcia tego przepisu.");
+                return "redirect:/"; // Przekieruj do strony głównej z komunikatem o braku uprawnień
+            }
         } else {
-            return "404";
+            model.addAttribute("error", "Przepis o podanym identyfikatorze nie istnieje.");
+            return "redirect:/"; // Przekieruj do strony głównej z komunikatem o nieistniejącym przepisie
         }
     }
 
