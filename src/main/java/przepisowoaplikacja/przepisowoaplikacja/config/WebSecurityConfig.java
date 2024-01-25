@@ -41,7 +41,7 @@ public class WebSecurityConfig {
                         .failureUrl("/login?error") // Przekieruj na stronę logowania z parametrem błędu po nieudanym logowaniu
                         .permitAll()
                         .permitAll()
-                        // Wyłącz ochronę przed atakami CSRF.
+                        // Wyłącz ochronę przed atakami CSRF....
 
                 )
                 .csrf(AbstractHttpConfigurer::disable)
